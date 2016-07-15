@@ -14,6 +14,8 @@
 #include <time.h>
 #include <stdlib.h>
 #include <ShellAPI.h>
+#include <fstream>
+#include <sstream>
 
 #include <wke.h>
 
@@ -399,12 +401,12 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
     wkeSettings settings;
     memset(&settings, 0, sizeof(settings));
 
-#if defined(WKE_BROWSER_USE_LOCAL_PROXY)
-    settings.proxy.type = WKE_PROXY_SOCKS5;
-    strcpy(settings.proxy.hostname, "127.0.0.1");
-    settings.proxy.port = 1080;
+//#if defined(WKE_BROWSER_USE_LOCAL_PROXY)
+    settings.proxy.type = WKE_PROXY_HTTP;
+    strcpy(settings.proxy.hostname, "web-proxy.sgp.hpecorp.net");
+    settings.proxy.port = 8080;
     settings.mask |= WKE_SETTING_PROXY;
-#endif
+//#endif
     //wkeInitializeEx(&settings);
     wkeConfigure(&settings);
 
@@ -1140,6 +1142,18 @@ LRESULT CALLBACK UrlEditProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 			url[len] = L'\0';
 			wkeRunJSW(g_webView, url + wcslen(L"javascript:"));
 		}
+		else if (wcsstr(url, L"jsfile:") == url)
+		{
+			url[len] = L'\0';
+			std::ifstream fin(url + wcslen(L"jsfile:"));
+			if (fin){
+				
+				std::stringstream buffer;
+				buffer << fin.rdbuf();
+				
+				wkeRunJS(g_webView, buffer.str().c_str());
+			}
+		}
 		else if (wcsstr(url, L"call") == url)
 		{
 			wkeJSState* es = wkeGlobalExec(g_webView);
@@ -1178,4 +1192,5 @@ LRESULT CALLBACK UrlEditProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
     
     return (LRESULT)CallWindowProc((WNDPROC)DefEditProc,hDlg,message,wParam,lParam);
 }
+
 

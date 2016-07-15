@@ -52,6 +52,7 @@ public:
 
     virtual void render(wkeWebView* webView)
     {
+		return;
         if (wkeIsDirty(webView))
         {
             if (m_pixels == NULL)

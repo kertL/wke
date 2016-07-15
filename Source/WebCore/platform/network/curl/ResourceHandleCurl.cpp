@@ -33,6 +33,7 @@
 #include "ResourceHandleInternal.h"
 #include "ResourceHandleManager.h"
 #include "SharedBuffer.h"
+#include <string>
 
 #if PLATFORM(WIN) && USE(CF)
 #include <wtf/PassRefPtr.h>
@@ -94,7 +95,13 @@ ResourceHandle::~ResourceHandle()
 {
     cancel();
 }
-
+void writetolog(const char* src){
+	if (src != NULL){
+		std::string msg("SkyUrl - ");
+		msg += src;
+		::OutputDebugStringA(msg.c_str());
+	}
+}
 bool ResourceHandle::start(NetworkingContext* context)
 {
     // The frame could be null if the ResourceHandle is not associated to any
@@ -104,6 +111,7 @@ bool ResourceHandle::start(NetworkingContext* context)
     // If both the frame and the page are not null the context is valid.
     if (context && !context->isValid())
         return false;
+	writetolog(this->d->m_firstRequest.url().urlString().string().ascii().data());
 
     ResourceHandleManager::sharedInstance()->add(this);
     return true;
