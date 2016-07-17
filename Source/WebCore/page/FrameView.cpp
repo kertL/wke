@@ -919,6 +919,7 @@ inline void FrameView::forceLayoutParentViewIfNeeded()
 
 void FrameView::layout(bool allowSubtree)
 {
+	return;
     if (m_inLayout)
         return;
 
@@ -1919,6 +1920,7 @@ void FrameView::deferredRepaintTimerFired(Timer<FrameView>*)
 
 void FrameView::layoutTimerFired(Timer<FrameView>*)
 {
+	return;
 #ifdef INSTRUMENT_LAYOUT_SCHEDULING
     if (!m_frame->document()->ownerElement())
         printf("Layout timer fired at %d\n", m_frame->document()->elapsedTime());

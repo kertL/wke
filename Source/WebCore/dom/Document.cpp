@@ -1572,6 +1572,7 @@ void Document::updateStyleIfNeeded()
 
 void Document::updateStyleForAllDocuments()
 {
+	return;
     ASSERT(isMainThread());
     if (!documentsThatNeedStyleRecalc)
         return;
@@ -1586,6 +1587,7 @@ void Document::updateStyleForAllDocuments()
 
 void Document::updateLayout()
 {
+	return;
     ASSERT(isMainThread());
     if (Element* oe = ownerElement())
         oe->document()->updateLayout();

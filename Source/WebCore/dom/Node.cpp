@@ -1480,6 +1480,7 @@ ContainerNode* Node::parentNodeForRenderingAndStyle()
 
 void Node::createRendererIfNeeded()
 {
+	return;
     NodeRendererFactory(this).createRendererIfNeeded();
 }
 
